@@ -32,7 +32,7 @@ jobs:
         run: |
           os=${{github.event.inputs.os}}
           if [ -z ${os} ]; then
-            echo "::set-output name=os::[ubuntu-18.04, ubuntu-20.04]"
+            echo "::set-output name=os::['ubuntu-18.04', 'ubuntu-20.04']"
           else
             echo "::set-output name=os::['${os}']"
           fi
