@@ -41,6 +41,7 @@ jobs:
 
   greet:
     name: Greet
+    needs: setup
     strategy:
       matrix:
         os: ${{ fromJSON(needs.setup.outputs.os) }}
