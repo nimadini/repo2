@@ -4,8 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       id:
-        description: 'Run ID.'
+        description: Run ID.
         required: false
+      os:
+        description: The os to run.
+        required: false
+        # type: choice
+        # options:
+        #   - 'a'
+        #   - 'b'
+        #   - 'c'
 
 jobs:
   id:
@@ -14,13 +22,30 @@ jobs:
     steps:
       - name: ${{github.event.inputs.id}}
         run: echo run identifier ${{ inputs.id }}
+
+  # Based on: https://github.community/t/how-to-feed-workflow-dispatch-inputs-into-a-test-matrix/247548/2
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    steps:
+      - id: set-matrix
+        run: |
+          os=${{github.event.inputs.os}}
+          if [ -z ${os} ]; then
+            echo "::set-output name=os::[ubuntu-18.04, ubuntu-20.04]"
+          else
+            echo "::set-output name=os::['${os}']"
+          fi
+    outputs:
+      os: ${{ steps.set-matrix.outputs.os }}
+
   greet:
     name: Greet
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04]
+        os: ${{ fromJSON(needs.setup.outputs.os) }}
         version: [10, 12]
     runs-on: ${{ matrix.os }}
     steps:
       - name: greetings
-        run: true
+        run: echo ${{ matrix.os }}
