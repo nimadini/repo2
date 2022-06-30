@@ -39,8 +39,8 @@ jobs:
     outputs:
       os: ${{ steps.set-matrix.outputs.os }}
 
-  greet:
-    name: Greet
+  validation:
+    name: Validation
     needs: setup
     strategy:
       matrix:
