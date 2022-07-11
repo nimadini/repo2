@@ -30,7 +30,7 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          os=${{github.event.inputs.os}}
+          os=$(${{github.event.inputs.os}} | jq -r '.os')
           if [ -z ${os} ]; then
             echo "::set-output name=os::['ubuntu-18.04', 'ubuntu-20.04']"
           else
