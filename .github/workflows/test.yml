@@ -25,8 +25,9 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          workflow_inputs=${{github.event.inputs.workflow_inputs}}
-          os=echo ${workflow_inputs} | jq -r '.os'
+          # workflow_inputs=${{github.event.inputs.workflow_inputs}}
+          # os=echo ${workflow_inputs} | jq -r '.os'
+          os=${{fromJson(github.event.inputs.workflow_inputs).os}}
           if [ -z ${os} ]; then
             echo "::set-output name=os::['ubuntu-18.04', 'ubuntu-20.04']"
           else
