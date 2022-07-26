@@ -6,7 +6,7 @@ on:
       id:
         description: Run ID.
         required: false
-      workflow_inputs:
+      payload:
         description: The JSON-encoded workflow inputs.
         required: false
 
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ${{github.event.inputs.id}}
-        run: echo run identifier ${{ inputs.id }}
+        run: echo run identifier ${{ github.event.inputs.id }}
 
   # Based on: https://github.community/t/how-to-feed-workflow-dispatch-inputs-into-a-test-matrix/247548/2
   setup:
@@ -25,9 +25,7 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          # workflow_inputs=${{github.event.inputs.workflow_inputs}}
-          # os=echo ${workflow_inputs} | jq -r '.os'
-          os=${{fromJson(github.event.inputs.workflow_inputs).os}}
+          os=${{fromJson(github.event.inputs.payload).os}}
           if [ -z ${os} ]; then
             echo "::set-output name=os::['ubuntu-18.04', 'ubuntu-20.04']"
           else
